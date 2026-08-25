@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#123a68" />
+    <meta name="description" content="마이 사운드 북마크 작품 QR을 스캔해 음악 재생하기" />
+    <title>음악 재생 | 마이 사운드 북마크</title>
+    <script type="module" src="/src/player.js"></script>
+  </head>
+  <body data-page="player">
+    <a class="skip-link" href="#main">본문으로 바로가기</a>
+    <header class="site-header">
+      <a class="school-brand" href="./index.html" aria-label="마이 사운드 북마크 홈">
+        <span class="school-mark" aria-hidden="true">GG</span>
+        <span><strong>경구중학교</strong><small>코딩으로 보는 세상</small></span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="./index.html">홈</a>
+        <a href="./experience.html">체험</a>
+        <a aria-current="page" href="./player.html">재생</a>
+      </nav>
+    </header>
+
+    <main id="main" class="player-shell">
+      <section class="page-intro player-intro">
+        <p class="eyebrow">PLAY YOUR SOUND</p>
+        <h1>나의 음악 다시 듣기</h1>
+        <p>포토 북마크의 ② 작품 QR을 카메라에 보여주세요.</p>
+      </section>
+
+      <section class="scanner-card" aria-labelledby="scanner-title">
+        <div class="scanner-copy">
+          <span class="panel-kicker">QR SCANNER</span>
+          <h2 id="scanner-title">작품 QR 불러오기</h2>
+          <p>카메라 영상은 QR을 읽는 동안에만 기기 안에서 처리되며 저장되거나 전송되지 않습니다.</p>
+        </div>
+
+        <div class="scanner-stage" id="scannerStage">
+          <video id="scannerVideo" playsinline muted aria-label="QR 스캔 카메라"></video>
+          <div class="scanner-placeholder" id="scannerPlaceholder">
+            <span aria-hidden="true">⌗</span>
+            <strong>작품 QR을 준비해 주세요</strong>
+          </div>
+          <div class="scan-frame" aria-hidden="true"><i></i></div>
+        </div>
+
+        <div class="scanner-controls">
+          <button class="button button-accent" id="scanButton" type="button">카메라로 QR 스캔</button>
+          <button class="button button-secondary" id="stopScanButton" type="button" hidden>카메라 끄기</button>
+          <label class="button button-ghost" for="qrUpload">QR 사진 불러오기</label>
+          <input id="qrUpload" class="visually-hidden" type="file" accept="image/*" />
+        </div>
+
+        <details class="manual-code">
+          <summary>카메라가 작동하지 않나요?</summary>
+          <label for="manualCode">작품 QR의 음악 데이터 또는 복구 코드를 붙여 넣으세요.</label>
+          <textarea id="manualCode" rows="3" placeholder="MSB1:..."></textarea>
+          <button class="button button-secondary" id="loadCodeButton" type="button">음악 불러오기</button>
+        </details>
+        <p class="inline-status" id="scanStatus" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="score-card is-empty" id="scoreCard" aria-labelledby="score-title">
+        <div class="score-heading">
+          <div>
+            <span class="panel-kicker">MY SCORE</span>
+            <h2 id="score-title">나의 5초 악보</h2>
+          </div>
+          <div class="score-meta" id="scoreMeta" hidden>
+            <span id="scoreInstrument"></span>
+            <span id="scoreNoteCount"></span>
+            <span id="scoreDuration"></span>
+          </div>
+        </div>
+
+        <div class="score-empty" id="scoreEmpty">
+          <span aria-hidden="true">♪</span>
+          <p>작품 QR을 읽으면 이곳에 악보가 나타납니다.</p>
+        </div>
+        <div class="score-view" id="scoreView" hidden></div>
+
+        <button class="button button-primary play-button" id="playButton" type="button" disabled>
+          <span aria-hidden="true">▶</span> 내 음악 재생
+        </button>
+      </section>
+
+      <section class="player-help">
+        <h2>두 개의 QR, 이렇게 사용해요</h2>
+        <ol>
+          <li><span>①</span><p><strong>플레이어 QR</strong>로 지금 보고 있는 웹사이트를 엽니다.</p></li>
+          <li><span>②</span><p><strong>작품 QR</strong>을 이 페이지에서 스캔하면 음악이 나타납니다.</p></li>
+          <li><span>▶</span><p><strong>재생 버튼</strong>을 눌러 내가 만든 5초 음악을 다시 듣습니다.</p></li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p><strong>경구중학교</strong> · 코딩으로 보는 세상</p>
+      <p>마이 사운드 북마크</p>
+    </footer>
+  </body>
+</html>
