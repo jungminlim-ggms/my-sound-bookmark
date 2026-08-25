@@ -2,7 +2,7 @@ import QRCode from "qrcode";
 import jsQR from "jsqr";
 import "./styles.css";
 import { playComposition, previewNote, stopPlayback } from "./audio-engine.js";
-import { clamp, drawImageCover, getPlayerUrl, loadImageFile, setStatus } from "./common.js";
+import { clamp, drawImageCover, loadImageFile, roundedRect, setStatus } from "./common.js";
 import {
   MAX_DURATION_MS,
   MAX_NOTES,
@@ -285,40 +285,29 @@ function makeQrCanvas(value, level = "Q") {
 
 async function renderResultCard() {
   if (!photoReady || !composition) return;
-  setStatus(resultStatus, "두 개의 QR과 인화 이미지를 만들고 있어요.");
+  setStatus(resultStatus, "음악 QR과 인화 이미지를 만들고 있어요.");
   currentMusicCode = encodeComposition(composition);
-  const [playerQr, personalQr] = await Promise.all([
-    makeQrCanvas(getPlayerUrl(), "M"),
-    makeQrCanvas(currentMusicCode, "Q")
-  ]);
+  const personalQr = await makeQrCanvas(currentMusicCode, "Q");
   musicQrCanvas = personalQr;
 
   const context = resultCanvas.getContext("2d");
   context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
   drawImageCover(context, photoCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
 
-  const qrSize = 280;
-  const qrInset = 32;
-  const qrPlacements = [
-    { x: qrInset, y: qrInset, qr: playerQr },
-    {
-      x: resultCanvas.width - qrSize - qrInset,
-      y: resultCanvas.height - qrSize - qrInset,
-      qr: personalQr
-    }
-  ];
+  const qrSize = 300;
+  const qrInset = 36;
+  const qrRadius = 34;
+  const qrX = resultCanvas.width - qrSize - qrInset;
+  const qrY = resultCanvas.height - qrSize - qrInset;
 
-  for (const item of qrPlacements) {
-    context.save();
-    context.shadowColor = "rgba(16, 47, 85, 0.28)";
-    context.shadowBlur = 18;
-    context.shadowOffsetY = 6;
-    context.imageSmoothingEnabled = false;
-    context.drawImage(item.qr, item.x, item.y, qrSize, qrSize);
-    context.restore();
-  }
+  context.save();
+  roundedRect(context, qrX, qrY, qrSize, qrSize, qrRadius);
+  context.clip();
+  context.imageSmoothingEnabled = false;
+  context.drawImage(personalQr, qrX, qrY, qrSize, qrSize);
+  context.restore();
 
-  setStatus(resultStatus, "XS-20L 정사각 인화 이미지가 완성되었습니다. QR 자체 점검 후 저장하거나 출력하세요.", "success");
+  setStatus(resultStatus, "둥근 음악 QR이 들어간 XS-20L 인화 이미지가 완성되었습니다.", "success");
 }
 
 downloadButton.addEventListener("click", () => {
