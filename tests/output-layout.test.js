@@ -12,9 +12,10 @@ test("XS-20L 결과 이미지는 1:1 정사각형이다", () => {
   assert.match(styles, /#printArea canvas\s*\{[\s\S]*?width:\s*72mm;[\s\S]*?height:\s*72mm;/);
 });
 
-test("인화 이미지에는 사진과 두 개의 QR만 배치한다", () => {
+test("인화 이미지에는 사진과 오른쪽 아래의 둥근 음악 QR만 배치한다", () => {
   assert.match(experienceScript, /drawImageCover\(context, photoCanvas, 0, 0/);
-  assert.match(experienceScript, /x:\s*qrInset, y:\s*qrInset, qr:\s*playerQr/);
-  assert.match(experienceScript, /x:\s*resultCanvas\.width - qrSize - qrInset/);
-  assert.doesNotMatch(experienceScript, /drawText|INSTRUMENT_NAMES|workTitle/);
+  assert.match(experienceScript, /const qrX = resultCanvas\.width - qrSize - qrInset/);
+  assert.match(experienceScript, /roundedRect\(context, qrX, qrY, qrSize, qrSize, qrRadius\)/);
+  assert.match(experienceScript, /context\.clip\(\)/);
+  assert.doesNotMatch(experienceScript, /playerQr|getPlayerUrl|drawText|INSTRUMENT_NAMES|workTitle/);
 });
