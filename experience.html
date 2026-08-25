@@ -131,30 +131,24 @@
       <section class="step-panel" data-step-panel="3" aria-labelledby="result-title" hidden>
         <div class="panel-heading">
           <span class="panel-kicker">STEP 3</span>
-          <h2 id="result-title">나만의 사운드 포토가 완성됐어요</h2>
-          <p>사진과 두 개의 QR을 확인한 뒤 이미지로 저장하거나 포토프린터로 출력하세요.</p>
+          <h2 id="result-title">XS-20L 사운드 포토가 완성됐어요</h2>
+          <p>사진 왼쪽 위와 오른쪽 아래의 QR을 확인한 뒤 이미지로 저장하거나 QX20으로 출력하세요.</p>
         </div>
 
         <div class="result-layout">
           <div class="result-preview" id="printArea">
-            <canvas id="resultCanvas" width="1200" height="1800" aria-label="완성된 사운드 포토"></canvas>
+            <canvas id="resultCanvas" width="1200" height="1200" aria-label="XS-20L용 정사각 사운드 포토"></canvas>
           </div>
 
           <div class="result-controls">
-            <label for="workTitle">작품 제목</label>
-            <div class="title-input-row">
-              <input id="workTitle" maxlength="18" value="나의 5초 음악" autocomplete="off" />
-              <button class="button button-secondary" id="applyTitleButton" type="button">적용</button>
-            </div>
-
             <div class="result-explain">
-              <div><span>①</span><p><strong>플레이어 QR</strong><br />음악 재생 사이트를 엽니다.</p></div>
-              <div><span>②</span><p><strong>작품 QR</strong><br />내 음악 데이터를 불러옵니다.</p></div>
+              <div><span>↖</span><p><strong>왼쪽 위 QR</strong><br />음악 재생 사이트를 엽니다.</p></div>
+              <div><span>↘</span><p><strong>오른쪽 아래 QR</strong><br />내 음악 데이터를 불러옵니다.</p></div>
             </div>
 
             <p class="inline-status" id="resultStatus" role="status" aria-live="polite"></p>
-            <button class="button button-accent button-wide" id="downloadButton" type="button">PNG 이미지 저장</button>
-            <button class="button button-primary button-wide" id="printButton" type="button">포토프린터로 출력</button>
+            <button class="button button-accent button-wide" id="downloadButton" type="button">XS-20L용 PNG 저장</button>
+            <button class="button button-primary button-wide" id="printButton" type="button">QX20 출력 화면 열기</button>
             <button class="button button-ghost button-wide" id="verifyButton" type="button">작품 QR 자체 점검</button>
           </div>
         </div>
