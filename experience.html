@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#123a68" />
+    <meta name="description" content="사진과 5초 음악으로 마이 사운드 북마크 만들기" />
+    <title>체험하기 | 마이 사운드 북마크</title>
+    <script type="module" src="/src/experience.js"></script>
+  </head>
+  <body data-page="experience">
+    <a class="skip-link" href="#main">본문으로 바로가기</a>
+    <header class="site-header">
+      <a class="school-brand" href="./index.html" aria-label="마이 사운드 북마크 홈">
+        <span class="school-mark" aria-hidden="true">GG</span>
+        <span><strong>경구중학교</strong><small>코딩으로 보는 세상</small></span>
+      </a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="./index.html">홈</a>
+        <a aria-current="page" href="./experience.html">체험</a>
+        <a href="./player.html">재생</a>
+      </nav>
+    </header>
+
+    <main id="main" class="experience-shell">
+      <section class="page-intro">
+        <p class="eyebrow">MAKE YOUR SOUND</p>
+        <h1>마이 사운드 북마크 만들기</h1>
+        <p>화면의 안내를 따라 세 단계로 나만의 작품을 완성해 보세요.</p>
+      </section>
+
+      <ol class="stepper" aria-label="체험 단계">
+        <li class="is-active" data-step-dot="1"><span>1</span><strong>사진 촬영</strong></li>
+        <li data-step-dot="2"><span>2</span><strong>음악 연주</strong></li>
+        <li data-step-dot="3"><span>3</span><strong>결과·출력</strong></li>
+      </ol>
+
+      <section class="step-panel is-active" data-step-panel="1" aria-labelledby="photo-title">
+        <div class="panel-heading">
+          <span class="panel-kicker">STEP 1</span>
+          <h2 id="photo-title">오늘의 모습을 사진으로 남겨요</h2>
+          <p>카메라로 촬영하거나 이미 찍은 사진을 불러올 수 있어요.</p>
+        </div>
+
+        <div class="photo-workspace">
+          <div class="camera-stage" id="cameraStage">
+            <video id="cameraVideo" playsinline muted aria-label="카메라 미리보기"></video>
+            <canvas id="photoCanvas" width="1200" height="900" aria-label="촬영한 사진"></canvas>
+            <div class="camera-placeholder" id="cameraPlaceholder">
+              <span class="camera-placeholder-icon" aria-hidden="true">◎</span>
+              <strong>카메라를 준비해 주세요</strong>
+              <p>사진은 이 기기 안에서만 사용됩니다.</p>
+            </div>
+            <div class="camera-guide" aria-hidden="true"></div>
+          </div>
+
+          <div class="camera-controls">
+            <button class="button button-primary" id="startCameraButton" type="button">카메라 켜기</button>
+            <button class="button button-accent" id="captureButton" type="button" hidden>사진 촬영</button>
+            <button class="button button-secondary" id="retakeButton" type="button" hidden>다시 촬영</button>
+            <label class="button button-ghost" for="photoUpload">사진 불러오기</label>
+            <input id="photoUpload" class="visually-hidden" type="file" accept="image/*" />
+          </div>
+          <p class="inline-status" id="photoStatus" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="privacy-note">
+          <strong>개인정보 보호</strong>
+          <p>사진은 QR에 포함되거나 서버로 전송되지 않으며, 현재 브라우저 화면에서 인화 이미지를 만드는 데만 사용됩니다.</p>
+        </div>
+
+        <div class="panel-actions panel-actions-end">
+          <button class="button button-primary" id="toMusicButton" type="button" disabled>다음: 음악 만들기</button>
+        </div>
+      </section>
+
+      <section class="step-panel" data-step-panel="2" aria-labelledby="music-title" hidden>
+        <div class="panel-heading">
+          <span class="panel-kicker">STEP 2</span>
+          <h2 id="music-title">7~14개의 음으로 5초 음악을 만들어요</h2>
+          <p>먼저 악기를 고르고, 녹음을 시작한 뒤 색깔 건반을 연주해 보세요.</p>
+        </div>
+
+        <fieldset class="instrument-picker">
+          <legend>악기 소리 선택</legend>
+          <label><input type="radio" name="instrument" value="0" checked /><span>맑은 벨</span></label>
+          <label><input type="radio" name="instrument" value="1" /><span>통통 마림바</span></label>
+          <label><input type="radio" name="instrument" value="2" /><span>반짝 신시</span></label>
+        </fieldset>
+
+        <div class="record-board">
+          <div class="record-status-row">
+            <div>
+              <span class="record-dot" id="recordDot" aria-hidden="true"></span>
+              <strong id="recordState">연습해 보세요</strong>
+            </div>
+            <div class="record-metrics">
+              <span><strong id="noteCount">0</strong>/14음</span>
+              <span><strong id="timeCount">0.0</strong>/5.0초</span>
+            </div>
+          </div>
+          <div class="time-track" aria-hidden="true"><span id="timeProgress"></span></div>
+
+          <div class="countdown" id="countdown" aria-live="assertive" hidden></div>
+          <div class="music-keys" id="musicKeys" aria-label="음악 건반">
+            <button class="music-key key-c" data-note="0" type="button"><span>도</span><kbd>A</kbd></button>
+            <button class="music-key key-d" data-note="1" type="button"><span>레</span><kbd>S</kbd></button>
+            <button class="music-key key-e" data-note="2" type="button"><span>미</span><kbd>D</kbd></button>
+            <button class="music-key key-f" data-note="3" type="button"><span>파</span><kbd>F</kbd></button>
+            <button class="music-key key-g" data-note="4" type="button"><span>솔</span><kbd>G</kbd></button>
+            <button class="music-key key-a" data-note="5" type="button"><span>라</span><kbd>H</kbd></button>
+            <button class="music-key key-b" data-note="6" type="button"><span>시</span><kbd>J</kbd></button>
+            <button class="music-key key-high-c" data-note="7" type="button"><span>높은 도</span><kbd>K</kbd></button>
+          </div>
+
+          <div class="record-controls">
+            <button class="button button-accent" id="recordButton" type="button">3초 후 녹음 시작</button>
+            <button class="button button-secondary" id="stopButton" type="button" hidden>녹음 끝내기</button>
+            <button class="button button-ghost" id="listenButton" type="button" disabled>내 음악 들어보기</button>
+            <button class="button button-ghost" id="redoMusicButton" type="button" disabled>다시 만들기</button>
+          </div>
+          <p class="inline-status" id="musicStatus" role="status" aria-live="polite">녹음 전에는 건반 소리를 자유롭게 연습할 수 있어요.</p>
+        </div>
+
+        <div class="panel-actions">
+          <button class="button button-secondary" id="backToPhotoButton" type="button">이전</button>
+          <button class="button button-primary" id="toResultButton" type="button" disabled>다음: 결과 확인</button>
+        </div>
+      </section>
+
+      <section class="step-panel" data-step-panel="3" aria-labelledby="result-title" hidden>
+        <div class="panel-heading">
+          <span class="panel-kicker">STEP 3</span>
+          <h2 id="result-title">나만의 사운드 포토가 완성됐어요</h2>
+          <p>사진과 두 개의 QR을 확인한 뒤 이미지로 저장하거나 포토프린터로 출력하세요.</p>
+        </div>
+
+        <div class="result-layout">
+          <div class="result-preview" id="printArea">
+            <canvas id="resultCanvas" width="1200" height="1800" aria-label="완성된 사운드 포토"></canvas>
+          </div>
+
+          <div class="result-controls">
+            <label for="workTitle">작품 제목</label>
+            <div class="title-input-row">
+              <input id="workTitle" maxlength="18" value="나의 5초 음악" autocomplete="off" />
+              <button class="button button-secondary" id="applyTitleButton" type="button">적용</button>
+            </div>
+
+            <div class="result-explain">
+              <div><span>①</span><p><strong>플레이어 QR</strong><br />음악 재생 사이트를 엽니다.</p></div>
+              <div><span>②</span><p><strong>작품 QR</strong><br />내 음악 데이터를 불러옵니다.</p></div>
+            </div>
+
+            <p class="inline-status" id="resultStatus" role="status" aria-live="polite"></p>
+            <button class="button button-accent button-wide" id="downloadButton" type="button">PNG 이미지 저장</button>
+            <button class="button button-primary button-wide" id="printButton" type="button">포토프린터로 출력</button>
+            <button class="button button-ghost button-wide" id="verifyButton" type="button">작품 QR 자체 점검</button>
+          </div>
+        </div>
+
+        <div class="panel-actions">
+          <button class="button button-secondary" id="backToMusicButton" type="button">이전</button>
+          <button class="button button-ghost" id="newExperienceButton" type="button">새 체험 시작</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p><strong>경구중학교</strong> · 코딩으로 보는 세상</p>
+      <p>사진과 음악은 서버에 저장되지 않습니다.</p>
+    </footer>
+  </body>
+</html>
