@@ -1610,15 +1610,15 @@ a {
 }
 
 @page {
-  size: 50mm 75mm;
+  size: 72mm 85mm;
   margin: 0;
 }
 
 @media print {
   html,
   body {
-    width: 50mm;
-    height: 75mm;
+    width: 72mm;
+    height: 85mm;
     margin: 0;
     padding: 0;
     background: #ffffff;
@@ -1637,16 +1637,16 @@ a {
     position: fixed;
     inset: 0;
     display: block;
-    width: 50mm;
-    height: 75mm;
+    width: 72mm;
+    height: 72mm;
     padding: 0;
     background: #ffffff;
     border-radius: 0;
   }
 
   #printArea canvas {
-    width: 50mm;
-    height: 75mm;
+    width: 72mm;
+    height: 72mm;
     border-radius: 0;
     box-shadow: none;
   }

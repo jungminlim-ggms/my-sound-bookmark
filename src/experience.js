@@ -2,9 +2,8 @@ import QRCode from "qrcode";
 import jsQR from "jsqr";
 import "./styles.css";
 import { playComposition, previewNote, stopPlayback } from "./audio-engine.js";
-import { clamp, drawImageCover, getPlayerUrl, loadImageFile, roundedRect, setStatus } from "./common.js";
+import { clamp, drawImageCover, getPlayerUrl, loadImageFile, setStatus } from "./common.js";
 import {
-  INSTRUMENT_NAMES,
   MAX_DURATION_MS,
   MAX_NOTES,
   MIN_NOTES,
@@ -42,8 +41,6 @@ const toResultButton = document.querySelector("#toResultButton");
 
 const resultCanvas = document.querySelector("#resultCanvas");
 const resultStatus = document.querySelector("#resultStatus");
-const workTitle = document.querySelector("#workTitle");
-const applyTitleButton = document.querySelector("#applyTitleButton");
 const downloadButton = document.querySelector("#downloadButton");
 const printButton = document.querySelector("#printButton");
 const verifyButton = document.querySelector("#verifyButton");
@@ -286,17 +283,6 @@ function makeQrCanvas(value, level = "Q") {
   }).then(() => canvas);
 }
 
-function drawText(context, text, x, y, options = {}) {
-  const { color = "#102f55", font = '700 48px "Malgun Gothic", sans-serif', align = "left" } = options;
-  context.save();
-  context.fillStyle = color;
-  context.font = font;
-  context.textAlign = align;
-  context.textBaseline = "alphabetic";
-  context.fillText(text, x, y);
-  context.restore();
-}
-
 async function renderResultCard() {
   if (!photoReady || !composition) return;
   setStatus(resultStatus, "두 개의 QR과 인화 이미지를 만들고 있어요.");
@@ -309,76 +295,31 @@ async function renderResultCard() {
 
   const context = resultCanvas.getContext("2d");
   context.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
-  context.fillStyle = "#f8f5ed";
-  context.fillRect(0, 0, resultCanvas.width, resultCanvas.height);
+  drawImageCover(context, photoCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
 
-  context.save();
-  roundedRect(context, 54, 54, 1092, 724, 38);
-  context.clip();
-  drawImageCover(context, photoCanvas, 54, 54, 1092, 724);
-  const photoShade = context.createLinearGradient(0, 520, 0, 778);
-  photoShade.addColorStop(0, "rgba(16,47,85,0)");
-  photoShade.addColorStop(1, "rgba(16,47,85,0.52)");
-  context.fillStyle = photoShade;
-  context.fillRect(54, 480, 1092, 298);
-  context.restore();
-
-  context.fillStyle = "#102f55";
-  context.fillRect(0, 790, 1200, 230);
-  drawText(context, "MY SOUND BOOKMARK", 600, 858, {
-    color: "#f4c552",
-    font: '700 30px "Malgun Gothic", sans-serif',
-    align: "center"
-  });
-  drawText(context, workTitle.value.trim() || "나의 5초 음악", 600, 948, {
-    color: "#ffffff",
-    font: '800 58px "Malgun Gothic", sans-serif',
-    align: "center"
-  });
-  drawText(context, `♪ ${INSTRUMENT_NAMES[composition.instrument]} · ${composition.events.length}개의 음`, 600, 998, {
-    color: "#d9e9f7",
-    font: '500 26px "Malgun Gothic", sans-serif',
-    align: "center"
-  });
-
-  const qrCards = [
-    { x: 35, label: "① 플레이어 열기", qr: playerQr, accent: "#2a9dba" },
-    { x: 615, label: "② 내 음악 불러오기", qr: personalQr, accent: "#ef6a62" }
+  const qrSize = 280;
+  const qrInset = 32;
+  const qrPlacements = [
+    { x: qrInset, y: qrInset, qr: playerQr },
+    {
+      x: resultCanvas.width - qrSize - qrInset,
+      y: resultCanvas.height - qrSize - qrInset,
+      qr: personalQr
+    }
   ];
-  for (const item of qrCards) {
-    context.fillStyle = "#ffffff";
-    roundedRect(context, item.x, 1044, 550, 622, 30);
-    context.fill();
-    context.fillStyle = item.accent;
-    roundedRect(context, item.x + 22, 1064, 506, 58, 18);
-    context.fill();
-    drawText(context, item.label, item.x + 275, 1106, {
-      color: "#ffffff",
-      font: '700 27px "Malgun Gothic", sans-serif',
-      align: "center"
-    });
+
+  for (const item of qrPlacements) {
+    context.save();
+    context.shadowColor = "rgba(16, 47, 85, 0.28)";
+    context.shadowBlur = 18;
+    context.shadowOffsetY = 6;
     context.imageSmoothingEnabled = false;
-    context.drawImage(item.qr, item.x + 25, 1138, 500, 500);
-    context.imageSmoothingEnabled = true;
+    context.drawImage(item.qr, item.x, item.y, qrSize, qrSize);
+    context.restore();
   }
 
-  drawText(context, "경구중학교", 58, 1742, {
-    color: "#102f55",
-    font: '800 34px "Malgun Gothic", sans-serif'
-  });
-  drawText(context, "코딩으로 보는 세상", 1142, 1742, {
-    color: "#536a82",
-    font: '600 27px "Malgun Gothic", sans-serif',
-    align: "right"
-  });
-
-  setStatus(resultStatus, "완성되었습니다. QR 자체 점검 후 저장하거나 출력하세요.", "success");
+  setStatus(resultStatus, "XS-20L 정사각 인화 이미지가 완성되었습니다. QR 자체 점검 후 저장하거나 출력하세요.", "success");
 }
-
-applyTitleButton.addEventListener("click", renderResultCard);
-workTitle.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") renderResultCard();
-});
 
 downloadButton.addEventListener("click", () => {
   resultCanvas.toBlob((blob) => {
@@ -396,7 +337,7 @@ downloadButton.addEventListener("click", () => {
 });
 
 printButton.addEventListener("click", () => {
-  setStatus(resultStatus, "인쇄 창에서 용지 크기와 여백 없음 옵션을 확인해 주세요.");
+  setStatus(resultStatus, "인쇄 창에서 XS-20L(72×85mm), 최대 정사각 영역 및 여백 없음 옵션을 확인해 주세요.");
   window.print();
 });
 
